@@ -24,13 +24,13 @@ __author__
 
 import re
 import sys
-import cPickle
-import ngram
-from feat_utils import dump_feat_name
+import _pickle as cPickle
+from Code.Feat.ngram import *
+from Code.Feat.feat_utils import dump_feat_name
 from sklearn.decomposition import TruncatedSVD
-from nlp_utils import stopwords, english_stemmer, stem_tokens, getTFV
+from Code.Feat.nlp_utils import stopwords, english_stemmer, stem_tokens, getTFV
 sys.path.append("../")
-from param_config import config
+from Code.param_config import config
 
 ######################
 ## Pre-process data ##
@@ -72,16 +72,16 @@ def cooccurrence_terms(lst1, lst2, join_str):
 ##################
 def extract_feat(df):
     ## unigram
-    print "generate unigram"
+    print("generate unigram")
     df["query_unigram"] = list(df.apply(lambda x: preprocess_data(x["query"]), axis=1))
     df["title_unigram"] = list(df.apply(lambda x: preprocess_data(x["product_title"]), axis=1))
     df["description_unigram"] = list(df.apply(lambda x: preprocess_data(x["product_description"]), axis=1))
     ## bigram
-    print "generate bigram"
+    print("generate bigram")
     join_str = "_"
-    df["query_bigram"] = list(df.apply(lambda x: ngram.getBigram(x["query_unigram"], join_str), axis=1))
-    df["title_bigram"] = list(df.apply(lambda x: ngram.getBigram(x["title_unigram"], join_str), axis=1))
-    df["description_bigram"] = list(df.apply(lambda x: ngram.getBigram(x["description_unigram"], join_str), axis=1))
+    df["query_bigram"] = list(df.apply(lambda x: getBigram(x["query_unigram"], join_str), axis=1))
+    df["title_bigram"] = list(df.apply(lambda x: getBigram(x["title_unigram"], join_str), axis=1))
+    df["description_bigram"] = list(df.apply(lambda x: getBigram(x["description_unigram"], join_str), axis=1))
     # ## trigram
     # join_str = "_"
     # df["query_trigram"] = list(df.apply(lambda x: ngram.getTrigram(x["query_unigram"], join_str), axis=1))
@@ -171,7 +171,7 @@ if __name__ == "__main__":
             path = "%s/Run%d/Fold%d" % (config.feat_folder, run+1, fold+1)
                 
             for feat_name,column_name in zip(feat_names, column_names):
-                print "generate %s feat" % feat_name
+                print("generate %s feat" % feat_name)
                 ## tfidf
                 tfv = getTFV(ngram_range=ngram_range)
                 X_tfidf_train = tfv.fit_transform(dfTrain.iloc[trainInd][column_name])
@@ -199,7 +199,7 @@ if __name__ == "__main__":
     print("For training and testing...")
     path = "%s/All" % config.feat_folder
     for feat_name,column_name in zip(feat_names, column_names):
-        print "generate %s feat" % feat_name
+        print("generate %s feat" % feat_name)
         tfv = getTFV(ngram_range=ngram_range)
         X_tfidf_train = tfv.fit_transform(dfTrain[column_name])
         X_tfidf_test = tfv.transform(dfTest[column_name])

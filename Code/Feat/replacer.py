@@ -17,8 +17,8 @@ __author__
 
 import re
 import csv
-import cPickle
 import numpy as np
+import _pickle as cPickle
 import pandas as pd
 from nltk.corpus import wordnet
 

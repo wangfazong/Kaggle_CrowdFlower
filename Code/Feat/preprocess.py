@@ -15,12 +15,12 @@ __author__
 """
 
 import sys
-import cPickle
 import numpy as np
+import _pickle as cPickle
 import pandas as pd
-from nlp_utils import clean_text, pos_tag_text
+from Code.Feat.nlp_utils import clean_text, pos_tag_text
 sys.path.append("../")
-from param_config import config
+from Code.param_config import config
 
 ###############
 ## Load Data ##

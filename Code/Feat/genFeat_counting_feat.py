@@ -34,13 +34,13 @@ __author__
 
 import re
 import sys
-import ngram
-import cPickle
+from Code.Feat.ngram import *
+import _pickle as cPickle
 import numpy as np
-from nlp_utils import stopwords, english_stemmer, stem_tokens
-from feat_utils import try_divide, dump_feat_name
+from Code.Feat.nlp_utils import stopwords, english_stemmer, stem_tokens
+from Code.Feat.feat_utils import try_divide, dump_feat_name
 sys.path.append("../")
-from param_config import config
+from Code.param_config import config
 
 
 
@@ -79,28 +79,28 @@ def preprocess_data(line,
 
 def extract_feat(df):
     ## unigram
-    print "generate unigram"
+    print ("generate unigram")
     df["query_unigram"] = list(df.apply(lambda x: preprocess_data(x["query"]), axis=1))
     df["title_unigram"] = list(df.apply(lambda x: preprocess_data(x["product_title"]), axis=1))
     df["description_unigram"] = list(df.apply(lambda x: preprocess_data(x["product_description"]), axis=1))
     ## bigram
-    print "generate bigram"
+    print("generate bigram")
     join_str = "_"
-    df["query_bigram"] = list(df.apply(lambda x: ngram.getBigram(x["query_unigram"], join_str), axis=1))
-    df["title_bigram"] = list(df.apply(lambda x: ngram.getBigram(x["title_unigram"], join_str), axis=1))
-    df["description_bigram"] = list(df.apply(lambda x: ngram.getBigram(x["description_unigram"], join_str), axis=1))
+    df["query_bigram"] = list(df.apply(lambda x: getBigram(x["query_unigram"], join_str), axis=1))
+    df["title_bigram"] = list(df.apply(lambda x: getBigram(x["title_unigram"], join_str), axis=1))
+    df["description_bigram"] = list(df.apply(lambda x: getBigram(x["description_unigram"], join_str), axis=1))
     ## trigram
-    print "generate trigram"
+    print ("generate trigram")
     join_str = "_"
-    df["query_trigram"] = list(df.apply(lambda x: ngram.getTrigram(x["query_unigram"], join_str), axis=1))
-    df["title_trigram"] = list(df.apply(lambda x: ngram.getTrigram(x["title_unigram"], join_str), axis=1))
-    df["description_trigram"] = list(df.apply(lambda x: ngram.getTrigram(x["description_unigram"], join_str), axis=1))
+    df["query_trigram"] = list(df.apply(lambda x: getTrigram(x["query_unigram"], join_str), axis=1))
+    df["title_trigram"] = list(df.apply(lambda x: getTrigram(x["title_unigram"], join_str), axis=1))
+    df["description_trigram"] = list(df.apply(lambda x: getTrigram(x["description_unigram"], join_str), axis=1))
 
 
     ################################
     ## word count and digit count ##
     ################################
-    print "generate word counting features"
+    print ("generate word counting features")
     feat_names = ["query", "title", "description"]
     grams = ["unigram", "bigram", "trigram"]
     count_digit = lambda x: sum([1. for w in x if w.isdigit()])
@@ -122,7 +122,7 @@ def extract_feat(df):
     ##############################
     ## intersect word count ##
     ##############################
-    print "generate intersect word counting features"
+    print ("generate intersect word counting features")
     #### unigram
     for gram in grams:
         for obs_name in feat_names:
@@ -142,7 +142,7 @@ def extract_feat(df):
     ######################################
     ## intersect word position feat ##
     ######################################
-    print "generate intersect word position features"
+    print("generate intersect word position features")
     for gram in grams:
         for target_name in feat_names:
             for obs_name in feat_names:

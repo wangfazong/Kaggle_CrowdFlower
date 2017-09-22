@@ -17,7 +17,7 @@ __author__
 import sys
 import csv
 import os
-import cPickle
+import _pickle as cPickle
 import numpy as np
 import pandas as pd
 import xgboost as xgb
@@ -43,16 +43,19 @@ from keras.layers.normalization import BatchNormalization
 from keras.layers.advanced_activations import PReLU
 from keras.utils import np_utils, generic_utils
 ## cutomized module
-from model_library_config import feat_folders, feat_names, param_spaces, int_feat
+from Code.Model.model_library_config import feat_folders, feat_names, param_spaces, int_feat
 sys.path.append("../")
-from param_config import config
-from ml_metrics import quadratic_weighted_kappa
-from utils import *
+from Code.param_config import config
+from Code.Model.ml_metrics import quadratic_weighted_kappa
+from Code.Model.utils import *
 
 
 global trial_counter
 global log_handler
 
+
+#####################todo
+global numOfClass
 
 ## libfm
 libfm_exe = "../../libfm-1.40.windows/libfm.exe"
@@ -87,7 +90,7 @@ def hyperopt_wrapper(param, feat_folder, feat_name):
             param[f] = int(param[f])
 
     print("------------------------------------------------------------")
-    print "Trial %d" % trial_counter
+    print ("Trial %d" % trial_counter)
 
     print("        Model")
     print("              %s" % feat_name)
@@ -103,7 +106,7 @@ def hyperopt_wrapper(param, feat_folder, feat_name):
     ## log
     var_to_log = [
         "%d" % trial_counter,
-        "%.6f" % kappa_cv_mean, 
+        "%.6f" % kappa_cv_mean,
         "%.6f" % kappa_cv_std
     ]
     for k,v in sorted(param.items()):
@@ -112,7 +115,7 @@ def hyperopt_wrapper(param, feat_folder, feat_name):
     log_handler.flush()
 
     return {'loss': -kappa_cv_mean, 'attachments': {'std': kappa_cv_std}, 'status': STATUS_OK}
-    
+
 
 #### train CV and final model with a specified parameter setting
 def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
@@ -185,15 +188,15 @@ def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
                     randnum = rng.uniform(size=numTrain)
                     index_base = [i for i in range(numTrain) if randnum[i] < bootstrap_ratio]
                     index_meta = [i for i in range(numTrain) if randnum[i] >= bootstrap_ratio]
-                
+
                 if param.has_key("booster"):
                     dvalid_base = xgb.DMatrix(X_valid, label=labels_valid, weight=weight_valid)
                     dtrain_base = xgb.DMatrix(X_train[index_base], label=labels_train[index_base], weight=weight_train[index_base])
-                        
+
                     watchlist = []
                     if verbose_level >= 2:
                         watchlist  = [(dtrain_base, 'train'), (dvalid_base, 'valid')]
-                    
+
                 ## various models
                 if param["task"] in ["regression", "ranking"]:
                     ## regression & pairwise ranking with xgboost
@@ -316,7 +319,7 @@ def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
                     os.system(cmd)
                     os.remove(feat_train_path+".tmp")
                     os.remove(feat_valid_path+".tmp")
-                    
+
                     ## extract libfm prediction
                     pred = np.loadtxt(raw_pred_valid_path, dtype=float)
                     ## labels are in [0,1,2,3]
@@ -421,7 +424,7 @@ def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
                     os.system(cmd)
 
 
-                    model_fn = model_fn_prefix + "-01" 
+                    model_fn = model_fn_prefix + "-01"
                     pars = [
                         "test_x_fn=",valid_x_fn,"\n",
                         "model_fn=", model_fn,"\n",
@@ -429,7 +432,7 @@ def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
                     ]
 
                     pars = "".join([str(p) for p in pars])
-                    
+
                     rfg_setting_valid = "./rfg_setting_valid"
                     with open(rfg_setting_valid+".inp", "wb") as f:
                         f.write(pars)
@@ -516,16 +519,16 @@ def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
     info_test = pd.read_csv(info_test_path)
     numTest = info_test.shape[0]
     id_test = info_test["id"]
-    
+
     ## load cdf
-    cdf_test = np.loadtxt(cdf_test_path, dtype=float)  
+    cdf_test = np.loadtxt(cdf_test_path, dtype=float)
     ##
     evalerror_regrank_test = lambda preds,dtrain: evalerror_regrank_cdf(preds, dtrain, cdf_test)
     evalerror_softmax_test = lambda preds,dtrain: evalerror_softmax_cdf(preds, dtrain, cdf_test)
     evalerror_softkappa_test = lambda preds,dtrain: evalerror_softkappa_cdf(preds, dtrain, cdf_test)
     evalerror_ebc_test = lambda preds,dtrain: evalerror_ebc_cdf(preds, dtrain, cdf_test, ebc_hard_threshold)
     evalerror_cocr_test = lambda preds,dtrain: evalerror_cocr_cdf(preds, dtrain, cdf_test)
-                    
+
     ## bagging
     preds_bagging = np.zeros((numTest, bagging_size), dtype=float)
     for n in range(bagging_size):
@@ -539,15 +542,15 @@ def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
             randnum = rng.uniform(size=numTrain)
             index_base = [i for i in range(numTrain) if randnum[i] < bootstrap_ratio]
             index_meta = [i for i in range(numTrain) if randnum[i] >= bootstrap_ratio]
- 
+
         if param.has_key("booster"):
             dtest = xgb.DMatrix(X_test, label=labels_test)
             dtrain = xgb.DMatrix(X_train[index_base], label=labels_train[index_base], weight=weight_train[index_base])
-                
+
             watchlist = []
             if verbose_level >= 2:
                 watchlist  = [(dtrain, 'train')]
-                    
+
         ## train
         if param["task"] in ["regression", "ranking"]:
             bst = xgb.train(param, dtrain, param['num_round'], watchlist, feval=evalerror_regrank_test)
@@ -660,7 +663,7 @@ def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
             os.system(cmd)
             os.remove(feat_train_path+".tmp")
             os.remove(feat_test_path+".tmp")
-            
+
             ## extract libfm prediction
             pred = np.loadtxt(raw_pred_test_path, dtype=float)
             ## labels are in [0,1,2,3]
@@ -762,7 +765,7 @@ def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
             os.system(cmd)
 
 
-            model_fn = model_fn_prefix + "-01" 
+            model_fn = model_fn_prefix + "-01"
             pars = [
                 "test_x_fn=",test_x_fn,"\n",
                 "model_fn=", model_fn,"\n",
@@ -770,7 +773,7 @@ def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
             ]
 
             pars = "".join([str(p) for p in pars])
-            
+
             rfg_setting_test = "./rfg_setting_test"
             with open(rfg_setting_test+".inp", "wb") as f:
                 f.write(pars)
@@ -788,24 +791,24 @@ def hyperopt_obj(param, feat_folder, feat_name, trial_counter):
     pred_rank = pred_raw.argsort().argsort()
     #
     ## write
-    output = pd.DataFrame({"id": id_test, "prediction": pred_raw})    
+    output = pd.DataFrame({"id": id_test, "prediction": pred_raw})
     output.to_csv(raw_pred_test_path, index=False)
 
     ## write
-    output = pd.DataFrame({"id": id_test, "prediction": pred_rank})    
+    output = pd.DataFrame({"id": id_test, "prediction": pred_rank})
     output.to_csv(rank_pred_test_path, index=False)
 
     ## write score
     pred_score = getScore(pred, cdf_test)
-    output = pd.DataFrame({"id": id_test, "prediction": pred_score})    
+    output = pd.DataFrame({"id": id_test, "prediction": pred_score})
     output.to_csv(subm_path, index=False)
     #"""
-        
+
     return kappa_cv_mean, kappa_cv_std
 
 
 
-    
+
 ####################
 ## Model Buliding ##
 ####################
@@ -843,7 +846,7 @@ if __name__ == "__main__":
             headers.append(k)
         writer.writerow( headers )
         log_handler.flush()
-        
+
         print("************************************************************")
         print("Search for the best params")
         #global trial_counter
@@ -858,7 +861,7 @@ if __name__ == "__main__":
         print("************************************************************")
         print("Best params")
         for k,v in best_params.items():
-            print "        %s: %s" % (k,v)
+            print ("        %s: %s" % (k,v))
         trial_kappas = -np.asarray(trials.losses(), dtype=float)
         best_kappa_mean = max(trial_kappas)
         ind = np.where(trial_kappas == best_kappa_mean)[0][0]

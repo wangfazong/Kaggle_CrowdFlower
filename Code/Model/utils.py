@@ -24,9 +24,9 @@ __author__
 
 import sys
 import numpy as np
-from ml_metrics import quadratic_weighted_kappa
+from Code.Model.ml_metrics import quadratic_weighted_kappa
 sys.path.append("../")
-from param_config import config
+from Code.param_config import config
 
 
 ######################

@@ -16,14 +16,13 @@ __author__
 
 import os
 import sys
-import cPickle
 import numpy as np
+import _pickle as cPickle
 import pandas as pd
 from scipy.sparse import hstack, vstack
 from sklearn.base import BaseEstimator
 from sklearn.datasets import dump_svmlight_file
-sys.path.append("../")
-from param_config import config
+from Code.param_config import config
 
 
 #### adopted from @Ben Hamner's Python Benchmark code
@@ -103,7 +102,7 @@ def combine_feat(feat_names, feat_path_name):
                         X_train, X_valid = np.hstack([X_train, x_train]), np.hstack([X_valid, x_valid])
 
                 print("Combine {:>2}/{:>2} feat: {} ({}D)".format(i+1, len(feat_names), feat_name, x_train.shape[1]))
-            print "Feat dim: {}D".format(X_train.shape[1])
+            print("Feat dim: {}D".format(X_train.shape[1]))
 
             ## load label
             # train
@@ -164,7 +163,7 @@ def combine_feat(feat_names, feat_path_name):
                 X_train, X_test = np.hstack([X_train, x_train]), np.hstack([X_test, x_test])
 
         print("Combine {:>2}/{:>2} feat: {} ({}D)".format(i+1, len(feat_names), feat_name, x_train.shape[1]))
-    print "Feat dim: {}D".format(X_train.shape[1])
+    print("Feat dim: {}D".format(X_train.shape[1]))
     
     ## load label
     # train

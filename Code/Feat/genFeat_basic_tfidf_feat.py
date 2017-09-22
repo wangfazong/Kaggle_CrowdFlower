@@ -36,18 +36,17 @@ __author__
 """
 
 import sys
-import cPickle
+import _pickle as cPickle
 import numpy as np
 import pandas as pd
 from copy import copy
 from scipy.sparse import vstack
-from nlp_utils import getTFV, getBOW
-from feat_utils import get_sample_indices_by_relevance, dump_feat_name
+from Code.Feat.nlp_utils import getTFV, getBOW
+from Code.Feat.feat_utils import get_sample_indices_by_relevance, dump_feat_name
 from sklearn.manifold import TSNE
 from sklearn.decomposition import TruncatedSVD
 from sklearn.metrics.pairwise import cosine_similarity, pairwise_distances
-sys.path.append("../")
-from param_config import config
+from Code.param_config import config
 
 
 stats_feat_flag = True
@@ -62,8 +61,8 @@ def cosine_sim(x, y):
         d = cosine_similarity(x, y)
         d = d[0][0]
     except:
-        print x
-        print y
+        print(x)
+        print(y)
         d = 0.
     return d
 
@@ -118,7 +117,7 @@ def extract_feat(path, dfTrain, dfTest, mode, feat_names, column_names):
         ##########################
         ## basic bow/tfidf feat ##
         ##########################
-        print "generate %s feat for %s" % (vec_type, column_name)
+        print("generate %s feat for %s" % (vec_type, column_name))
         if vec_type == "tfidf":
             vec = getTFV(ngram_range=ngram_range, vocabulary=vocabulary)
         elif vec_type == "bow":
@@ -139,7 +138,7 @@ def extract_feat(path, dfTrain, dfTest, mode, feat_names, column_names):
             query_relevance_indices_dict = get_sample_indices_by_relevance(dfTrain, "qid")
             ## skip query part
             if column_name in ["product_title", "product_description"]:
-                print "generate %s stats feat for %s" % (vec_type, column_name)
+                print("generate %s stats feat for %s" % (vec_type, column_name))
                 ## train
                 cosine_sim_stats_feat_by_relevance_train = generate_dist_stats_feat("cosine", X_train, dfTrain["id"].values,
                                                                     X_train, dfTrain["id"].values,
@@ -173,7 +172,7 @@ def extract_feat(path, dfTrain, dfTest, mode, feat_names, column_names):
     #####################
     for i in range(len(feat_names)-1):
         for j in range(i+1,len(feat_names)):
-            print "generate common %s cosine sim feat for %s and %s" % (vec_type, feat_names[i], feat_names[j])
+            print("generate common %s cosine sim feat for %s and %s" % (vec_type, feat_names[i], feat_names[j]))
             for mod in ["train", mode]:
                 with open("%s/%s.%s.feat.pkl" % (path, mod, feat_names[i]), "rb") as f:
                     target_vec = cPickle.load(f)
@@ -204,7 +203,7 @@ def extract_feat(path, dfTrain, dfTest, mode, feat_names, column_names):
         svd.fit(X_vec_all_train)
         ## load bow/tfidf (for less coding...)
         for feat_name,column_name in zip(feat_names, column_names):
-            print "generate common %s-svd%d feat for %s" % (vec_type, n_components, column_name)
+            print("generate common %s-svd%d feat for %s" % (vec_type, n_components, column_name))
             with open("%s/train.%s.feat.pkl" % (path, feat_name), "rb") as f:
                 X_vec_train = cPickle.load(f)
             with open("%s/%s.%s.feat.pkl" % (path, mode, feat_name), "rb") as f:
@@ -224,7 +223,7 @@ def extract_feat(path, dfTrain, dfTest, mode, feat_names, column_names):
                 ## bow/tfidf-svd cosine sim stats feat ##
                 #####################################
                 if column_name in ["product_title", "product_description"]:
-                    print "generate common %s-svd%d stats feat for %s" % (vec_type, n_components, column_name)
+                    print("generate common %s-svd%d stats feat for %s" % (vec_type, n_components, column_name))
                     ## train
                     cosine_sim_stats_feat_by_relevance_train = generate_dist_stats_feat("cosine", X_svd_train, dfTrain["id"].values,
                                                                         X_svd_train, dfTrain["id"].values,
@@ -258,7 +257,7 @@ def extract_feat(path, dfTrain, dfTest, mode, feat_names, column_names):
         #####################
         for i in range(len(feat_names)-1):
             for j in range(i+1,len(feat_names)):
-                print "generate common %s-svd%d cosine sim feat for %s and %s" % (vec_type, n_components, feat_names[i], feat_names[j])
+                print("generate common %s-svd%d cosine sim feat for %s and %s" % (vec_type, n_components, feat_names[i], feat_names[j]))
                 for mod in ["train", mode]:
                     with open("%s/%s.%s_common_svd%d.feat.pkl" % (path, mod, feat_names[i], n_components), "rb") as f:
                         target_vec = cPickle.load(f)
@@ -276,7 +275,7 @@ def extract_feat(path, dfTrain, dfTest, mode, feat_names, column_names):
         #########################
         ## generate individual svd feat
         for feat_name,column_name in zip(feat_names, column_names):
-            print "generate individual %s-svd%d feat for %s" % (vec_type, n_components, column_name)
+            print("generate individual %s-svd%d feat for %s" % (vec_type, n_components, column_name))
             with open("%s/train.%s.feat.pkl" % (path, feat_name), "rb") as f:
                 X_vec_train = cPickle.load(f)
             with open("%s/%s.%s.feat.pkl" % (path, mode, feat_name), "rb") as f:
@@ -296,7 +295,7 @@ def extract_feat(path, dfTrain, dfTest, mode, feat_names, column_names):
                 ## bow/tfidf-svd cosine sim stats feat ##
                 #########################################
                 if column_name in ["product_title", "product_description"]:
-                    print "generate individual %s-svd%d stats feat for %s" % (vec_type, n_components, column_name)
+                    print("generate individual %s-svd%d stats feat for %s" % (vec_type, n_components, column_name))
                     ## train
                     cosine_sim_stats_feat_by_relevance_train = generate_dist_stats_feat("cosine", X_svd_train, dfTrain["id"].values,
                                                                         X_svd_train, dfTrain["id"].values,

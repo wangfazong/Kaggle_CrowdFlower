@@ -16,10 +16,10 @@ __author__
 """
 
 import sys
-import cPickle
+import _pickle as cPickle
 from sklearn.cross_validation import StratifiedKFold
 sys.path.append("../")
-from param_config import config
+from Code.param_config import config
 
 
 if __name__ == "__main__":

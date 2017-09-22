@@ -17,10 +17,10 @@ __author__
 """
 
 import sys
-import cPickle
 from sklearn.preprocessing import LabelBinarizer
+import _pickle as cPickle
 sys.path.append("../")
-from param_config import config
+from Code.param_config import config
 
 
 if __name__ == "__main__":

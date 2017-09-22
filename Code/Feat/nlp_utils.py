@@ -18,11 +18,11 @@ import re
 import sys
 import nltk
 from bs4 import BeautifulSoup
-from replacer import CsvWordReplacer
+from Code.Feat.replacer import CsvWordReplacer
 from nltk import pos_tag
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
 sys.path.append("../")
-from param_config import config
+from Code.param_config import config
 
 ################
 ## Stop Words ##

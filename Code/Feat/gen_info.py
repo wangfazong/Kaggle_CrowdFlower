@@ -24,11 +24,11 @@ __author__
 
 import os
 import sys
-import cPickle
 import numpy as np
+import _pickle as cPickle
 import pandas as pd
 sys.path.append("../")
-from param_config import config
+from Code.param_config import config
 
 def gen_info(feat_path_name):
     ###############

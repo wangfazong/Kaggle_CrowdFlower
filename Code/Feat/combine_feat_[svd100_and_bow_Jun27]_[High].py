@@ -19,9 +19,9 @@ __author__
 
 import sys
 sys.path.append("../")
-from param_config import config
-from gen_info import gen_info
-from combine_feat import combine_feat, SimpleTransform
+from Code.param_config import config
+from Code.Feat.gen_info import gen_info
+from Code.Feat.combine_feat import combine_feat, SimpleTransform
 
             
 if __name__ == "__main__":
