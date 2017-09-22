@@ -24,7 +24,6 @@ from sklearn.base import BaseEstimator
 from sklearn.datasets import dump_svmlight_file
 from Code.param_config import config
 
-
 #### adopted from @Ben Hamner's Python Benchmark code
 ## https://www.kaggle.com/benhamner/crowdflower-search-relevance/python-benchmark
 def identity(x):

@@ -48,9 +48,7 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.metrics.pairwise import cosine_similarity, pairwise_distances
 from Code.param_config import config
 
-
 stats_feat_flag = True
-
 
 #####################
 ## Helper function ##

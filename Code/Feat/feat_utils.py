@@ -1,19 +1,15 @@
 
 """
 __file__
-
 	feat_utils.py
 
 __description__
-
 	This file provides utils for generating features.
 
 __author__
-
 	Chenglong Chen < c.chenglong@gmail.com >
 
 """
-
 
 def try_divide(x, y, val=0.0):
     """ 
@@ -22,7 +18,6 @@ def try_divide(x, y, val=0.0):
     if y != 0.0:
     	val = float(x) / y
     return val
-
 
 def get_sample_indices_by_relevance(dfTrain, additional_key=None):
 	""" 
@@ -38,7 +33,6 @@ def get_sample_indices_by_relevance(dfTrain, additional_key=None):
 	d = dict(agg)
 	dfTrain = dfTrain.drop("sample_index", axis=1)
 	return d
-
 
 def dump_feat_name(feat_names, feat_name_file):
 	"""

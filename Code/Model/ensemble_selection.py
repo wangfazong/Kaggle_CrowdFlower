@@ -13,16 +13,12 @@ __author__
     Chenglong Chen < c.chenglong@gmail.com >
 
 """
-
-
-import csv
 import sys
 import numpy as np
 import pandas as pd
 from Code.Model.utils import getScore, getTestScore
 from Code.Model.ml_metrics import quadratic_weighted_kappa
 from hyperopt import fmin, tpe, hp, STATUS_OK, STATUS_FAIL, Trials
-sys.path.append("../")
 from Code.param_config import config
 
 ########################

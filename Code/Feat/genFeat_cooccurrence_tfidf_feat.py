@@ -29,7 +29,6 @@ from Code.Feat.ngram import *
 from Code.Feat.feat_utils import dump_feat_name
 from sklearn.decomposition import TruncatedSVD
 from Code.Feat.nlp_utils import stopwords, english_stemmer, stem_tokens, getTFV
-sys.path.append("../")
 from Code.param_config import config
 
 ######################

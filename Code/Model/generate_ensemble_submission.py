@@ -1,4 +1,3 @@
-
 """
 __file__
 
@@ -13,19 +12,15 @@ __author__
     Chenglong Chen < c.chenglong@gmail.com >
 
 """
-
 import os
 from Code.Model.ensemble_selection import *
 from Code.Model.model_library_config import feat_folders, feat_names
 
-
-##
 ## config
 model_folder = "../../Output"
 subm_folder = "../../Output/Subm"
 if not os.path.exists(subm_folder):
     os.makedirs(subm_folder)
-
 
 ## load test info
 feat_folder = feat_folders[0]

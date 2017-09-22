@@ -17,7 +17,6 @@ __author__
 import numpy as np
 from hyperopt import hp
 
-
 ############
 ## Config ##
 ############

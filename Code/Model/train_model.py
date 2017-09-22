@@ -44,15 +44,12 @@ from keras.layers.advanced_activations import PReLU
 from keras.utils import np_utils, generic_utils
 ## cutomized module
 from Code.Model.model_library_config import feat_folders, feat_names, param_spaces, int_feat
-sys.path.append("../")
 from Code.param_config import config
 from Code.Model.ml_metrics import quadratic_weighted_kappa
 from Code.Model.utils import *
 
-
 global trial_counter
 global log_handler
-
 
 #####################todo
 global numOfClass

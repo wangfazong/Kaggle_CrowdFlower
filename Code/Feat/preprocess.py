@@ -19,7 +19,6 @@ import numpy as np
 import _pickle as cPickle
 import pandas as pd
 from Code.Feat.nlp_utils import clean_text, pos_tag_text
-sys.path.append("../")
 from Code.param_config import config
 
 ###############
@@ -33,7 +32,6 @@ dfTest = pd.read_csv(config.original_test_data_path).fillna("")
 num_train, num_test = dfTrain.shape[0], dfTest.shape[0]
 
 print("Done.")
-
 
 ######################
 ## Pre-process Data ##

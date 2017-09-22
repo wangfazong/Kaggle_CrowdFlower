@@ -13,10 +13,8 @@ __author__
     Chenglong Chen < c.chenglong@gmail.com >
 
 """
-
 import os
 import numpy as np
-
 
 ############
 ## Config ##

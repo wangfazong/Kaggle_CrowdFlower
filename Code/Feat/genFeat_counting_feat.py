@@ -39,9 +39,7 @@ import _pickle as cPickle
 import numpy as np
 from Code.Feat.nlp_utils import stopwords, english_stemmer, stem_tokens
 from Code.Feat.feat_utils import try_divide, dump_feat_name
-sys.path.append("../")
 from Code.param_config import config
-
 
 
 def get_position_list(target, obs):

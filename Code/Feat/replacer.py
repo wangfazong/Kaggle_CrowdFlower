@@ -14,14 +14,8 @@ __author__
     Chenglong Chen < c.chenglong@gmail.com >
 
 """
-
-import re
 import csv
-import numpy as np
-import _pickle as cPickle
-import pandas as pd
 from nltk.corpus import wordnet
-
 
 ##########################
 ## Synonym Replacement ##

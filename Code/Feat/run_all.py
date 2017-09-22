@@ -23,10 +23,6 @@ import os
 cmd = "python ./preprocess.py"
 os.system(cmd)
 
-# #### generate kfold
-# cmd = "python ./gen_kfold.py"
-# os.system(cmd)
-
 #######################
 ## Generate features ##
 #######################

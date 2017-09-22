@@ -1,4 +1,3 @@
-
 """
 __file__
 
@@ -13,7 +12,6 @@ __author__
     Chenglong Chen < c.chenglong@gmail.com >
 
 """
-
 import re
 import sys
 import nltk
@@ -21,7 +19,6 @@ from bs4 import BeautifulSoup
 from Code.Feat.replacer import CsvWordReplacer
 from nltk import pos_tag
 from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
-sys.path.append("../")
 from Code.param_config import config
 
 ################

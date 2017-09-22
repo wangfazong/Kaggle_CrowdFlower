@@ -1,4 +1,3 @@
-
 """
 __file__
 
@@ -21,13 +20,10 @@ __author__
     Chenglong Chen < c.chenglong@gmail.com >
 
 """
-
 import sys
 import numpy as np
 from Code.Model.ml_metrics import quadratic_weighted_kappa
-sys.path.append("../")
 from Code.param_config import config
-
 
 ######################
 ## Helper Functions ##

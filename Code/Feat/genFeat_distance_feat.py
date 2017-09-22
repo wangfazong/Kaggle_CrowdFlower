@@ -40,7 +40,6 @@ import pandas as pd
 from copy import copy
 from Code.Feat.nlp_utils import stopwords, english_stemmer, stem_tokens
 from Code.Feat.feat_utils import try_divide, get_sample_indices_by_relevance, dump_feat_name
-sys.path.append("../")
 from Code.param_config import config
 
 ## stats feat is quite time-consuming to generate
